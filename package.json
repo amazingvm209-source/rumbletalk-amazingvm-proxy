@@ -1,0 +1,12 @@
+{
+  "name": "rumbletalk-amazingvm",
+  "version": "1.0.0",
+  "main": "rumbletalk-amazingvm.js",
+  "scripts": {
+    "start": "node rumbletalk-amazingvm.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "node-fetch": "^2.6.7"
+  }
+}
