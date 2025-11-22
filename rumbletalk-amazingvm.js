@@ -1,9 +1,9 @@
 const express = require("express");
 const fetch = require("node-fetch");
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 10000;
 
-// Root route just to confirm service is running
+// Root route
 app.get("/", (req, res) => {
   res.send("Proxy is running. Use /rumbletalk-amazingvm");
 });
@@ -27,27 +27,16 @@ app.get("/rumbletalk-amazingvm", async (req, res) => {
 
     let html = await response.text();
 
-    // Remove any mobile viewport meta
+    // Remove mobile viewport meta
     html = html.replace(/<meta[^>]*name=["']viewport["'][^>]*>/gi, "");
 
-    // Inject desktop CSS overrides with scaling for mobile
+    // Inject desktop-mode flag
     html = html.replace("</head>", `
-      <style>
-        /* Force desktop layout */
-        html, body {
-          min-width: 1024px !important;
-        }
-        /* Scale down desktop layout to fit mobile screens */
-        body {
-          transform: scale(0.35);   /* adjust this factor until it fits nicely */
-          transform-origin: top left;
-          width: 100% !important;
-          overflow-x: hidden !important;
-        }
-        iframe {
-          min-width: 1024px !important;
-        }
-      </style>
+      <script>
+        // Force desktop mode flag
+        window.isDesktopMode = true;
+        document.documentElement.setAttribute("data-mode", "desktop");
+      </script>
     </head>`);
 
     res.set("Content-Type", "text/html; charset=utf-8").send(html);
